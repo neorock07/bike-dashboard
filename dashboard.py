@@ -5,8 +5,8 @@ import seaborn as sns
 from babel.numbers import format_currency
 sns.set(style='dark')
 
-data_day = pd.read_csv("../day.csv")
-data_h = pd.read_csv("../hour.csv")
+data_day = pd.read_csv("day.csv")
+data_h = pd.read_csv("hour.csv")
 
 data_day['dteday'] = pd.to_datetime(data_day['dteday'])
 data_h['dteday'] = pd.to_datetime(data_h['dteday'])
@@ -81,6 +81,10 @@ def get_user_season(df):
     items = df.sort_values(by="dteday")
     return items
 
+def get_user_day(df):
+    items = df.sort_values(by="dteday")
+    return items
+
 st.header("Dashboard Bike")
 
 with st.sidebar:
@@ -102,6 +106,7 @@ with st.sidebar:
     daily_hum = get_hum(mn_df)
     daily_atemp = get_atemp(mn_df)
     daily_season = get_user_season(mn_df)
+    user_day = get_user_day(mn_df)
     
 st.subheader("Daily User")
 col1, col2, col3 = st.columns(3)
@@ -139,10 +144,20 @@ with col3:
 with col4:
     st.metric("Mean Feeling Temp", value="{:.2f}".format(daily_atemp.atemp.mean()))   
 
-st.subheader("Season")
-fig, ax = plt.subplots(figsize=(12,10))
-sns.barplot(x="season", y="cnt", data=daily_season, hue="season")
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=15)
-plt.ylabel("Total Users")
-st.pyplot(fig) 
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Season")
+    fig, ax = plt.subplots(figsize=(12,10))
+    sns.barplot(x="season", y="cnt", data=daily_season, hue="season")
+    ax.tick_params(axis='y', labelsize=20)
+    ax.tick_params(axis='x', labelsize=15)
+    plt.ylabel("Total Users")
+    st.pyplot(fig)
+
+with col2:
+    st.subheader("Waktu sewa")
+    fig, ax = plt.subplots(figsize=(12,10))
+    sns.barplot(x="workingday", y="cnt", data=user_day)
+    plt.ylabel("Jumlah user")
+    plt.legend(["0=holiday/weekend", "1=workingday"])
+    st.pyplot(fig) 
