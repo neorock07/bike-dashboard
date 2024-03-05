@@ -122,6 +122,7 @@ ax.plot(daily_user['dteday'],
          marker="o",
          linewidth=2
          )
+plt.ylabel("Total users")
 ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=15)
 st.pyplot(fig) 
@@ -143,4 +144,5 @@ fig, ax = plt.subplots(figsize=(12,10))
 sns.barplot(x="season", y="cnt", data=daily_season, hue="season")
 ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=15)
+plt.ylabel("Total Users")
 st.pyplot(fig) 
